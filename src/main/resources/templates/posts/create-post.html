@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Post</title>
+    <style>
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Create a New Post</h1>
+<form th:action="@{/create}" th:method="POST" th:object="${post}">
+    <label for="title">Title:</label>
+    <input type="text" id="title" th:field="*{title}" required />
+    <label for="excerpt">Excerpt:</label>
+    <input type="text" id="excerpt" th:field="*{excerpt}" required />
+    <label for="content">Content:</label>
+    <textarea id="content" th:field="*{content}" required></textarea>
+    <label for="tag">Tags (comma separated):</label>
+    <input type="text" id="tag" name="tag" required />
+    <button type="submit">Create Post</button>
+</form>
+
+</body>
+</html>

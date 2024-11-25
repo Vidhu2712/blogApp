@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Posts</title>
+</head>
+<body>
+<h1>Your Blog Posts</h1>
+<ul>
+    <li th:each="post : ${posts}">
+        <h2 th:text="${post.title}"></h2>
+        <p th:text="${post.excerpt}"></p>
+        <p><strong>Published At:</strong> <span th:text="${post.publishedAt}"></span></p>
+        <p><a th:href="@{/posts/{id}(id=${post.id})}">Read More</a></p>
+    </li>
+</ul>
+<a href="/users/login">Logout</a>
+</body>
+</html>
+
