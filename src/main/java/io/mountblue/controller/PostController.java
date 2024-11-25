@@ -9,6 +9,7 @@ import io.mountblue.service.CommentService;
 import io.mountblue.service.PostService;
 import io.mountblue.service.TagService;
 import io.mountblue.service.UserService;
+import org.hibernate.annotations.Fetch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,8 +45,8 @@ public class PostController {
     private TagService tagService;
 
     @GetMapping
-    public String getAllPosts( @RequestParam(defaultValue = "0") int page,
-                               @RequestParam(defaultValue = "10") int size, Model model) {
+    public String getAllPosts(@RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "10") int size, Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> posts = postService.getAllPosts(pageable);
         model.addAttribute("posts", posts.getContent());
@@ -64,8 +65,8 @@ public class PostController {
 
     @PostMapping("/create")
     public String createPost(@ModelAttribute Post post, @RequestParam String tag) {
-        postService.createPost(post,tag);
-         return "redirect:/";
+        postService.createPost(post, tag);
+        return "redirect:/";
     }
 
     @GetMapping("/{id}")
@@ -161,7 +162,7 @@ public class PostController {
                              @RequestParam("tagsInput") String tagsInput,
                              @RequestParam("title") String title,
                              @RequestParam("excerpt") String excerpt,
-                             @RequestParam("content") String content,Model model) {
+                             @RequestParam("content") String content, Model model) {
         UUID uuid = UUID.fromString(id);
         Post post = postService.getPostById(uuid);
         postService.updatePost(uuid, title, excerpt, content);
@@ -169,4 +170,22 @@ public class PostController {
         model.addAttribute("post", post);
         return "redirect:/";
     }
+
+    @GetMapping("/sort")
+    public String sortPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "publishedAt") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending,
+            Model model) {
+        Page<Post> sortedPosts = postService.sortPosts(page, size, sortBy, ascending);
+        model.addAttribute("posts", sortedPosts.getContent());
+        model.addAttribute("currentPage", sortedPosts.getNumber());
+        model.addAttribute("totalPages", sortedPosts.getTotalPages());
+        model.addAttribute("pageSize", sortedPosts.getSize());
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("ascending", ascending);
+        return "posts/list";
+    }
+
 }

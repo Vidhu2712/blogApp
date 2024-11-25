@@ -178,7 +178,8 @@
                 <a href="/users/register">Register</a>
             </div>
             <div th:if="${#authentication.name !='anonymousUser'}">
-             <a href="/logout">Logout</a><a href="/create" class="create-post">Create Post</a>
+             <a href="/logout">Logout</a>
+                <a href="/create" class="create-post">Create Post</a>
             </div>
         </div>
     </div>
@@ -200,10 +201,16 @@
 
     </div>
 
-    <div class="action-bar">
-        <a href="/?sort=desc" class="sort-button">Sort by Oldest</a>
-        <a href="/?sort=asc" class="sort-button">Sort by Recent</a>
-    </div>
+    <form th:action="@{/sort}" method="get" style="margin-bottom: 20px;">
+        <div>
+            <label for="sortOrder">Sort By:</label>
+            <select id="sortOrder" name="ascending">
+                <option value="true" th:selected="${ascending == true}">Published Date (Ascending)</option>
+                <option value="false" th:selected="${ascending == false}">Published Date (Descending)</option>
+            </select>
+            <button type="submit">Sort</button>
+        </div>
+    </form>
 
     <div th:each="post : ${posts}" class="post">
         <h2><a th:href="@{'/' + ${post.id}}" th:text="${post.title}"></a></h2>
@@ -215,20 +222,17 @@
         </div>
     </div>
 </div>
-
-<div class="pagination">
+<nav th:if="${totalPages > 0}">
     <ul>
-        <li th:if="${currentPage > 0}">
-            <a th:href="@{${pageParam}(page=${currentPage - 1})}">Previous</a>
-        </li>
-        <li th:each="page : ${#numbers.sequence(0, totalPages - 1)}">
-            <a th:href="@{${pageParam}(page=${page})}" th:text="${page + 1}"></a>
-        </li>
-        <li th:if="${currentPage < totalPages - 1}">
-            <a th:href="@{${pageParam}(page=${currentPage + 1})}">Next</a>
+        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${i == currentPage} ? 'active' : ''">
+            <a th:href="@{'/filter'(page=${i}, size=${size}, author=${author}, tag=${tag}, startDate=${startDate}, endDate=${endDate})}"
+               th:text="${i + 1}"></a>
         </li>
     </ul>
-</div>
+</nav>
+<p th:if="${totalPages == 0}">No posts to display.</p>
+
 
 
 <footer>

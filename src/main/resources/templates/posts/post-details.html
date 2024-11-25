@@ -202,12 +202,13 @@
 
     <div th:if="${post.user.email == currentUser}" class="actions">
         <a th:href="@{'/update/' + ${post.id}}">Update Post</a>
+        <div>
         <form th:action="@{/delete/{id}(id=${post.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this post?');">
             <input type="hidden" name="_method" value="delete">
             <button type="submit">Delete</button>
         </form>
+        </div>
     </div>
-
     <hr>
     <div class="comment-section">
         <h2>Comments</h2>

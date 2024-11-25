@@ -33,10 +33,18 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     Page<Post> searchPosts(@Param("query") String query, Pageable pageable);
 
 
-    @Query("SELECT p FROM Post p WHERE p.publishedAt BETWEEN :startDate AND :endDate")
+//    @Query("SELECT p FROM Post p WHERE p.publishedAt BETWEEN :startDate AND :endDate")
+//    Page<Post> filterByDate(@Param("startDate") LocalDateTime startDate,
+//                            @Param("endDate") LocalDateTime endDate,
+//                            Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE " +
+            "(cast(:startDate as timestamp) IS NULL OR p.publishedAt >= :startDate) AND " +
+            "(cast(:endDate as timestamp) IS NULL OR p.publishedAt <= :endDate)")
     Page<Post> filterByDate(@Param("startDate") LocalDateTime startDate,
                             @Param("endDate") LocalDateTime endDate,
                             Pageable pageable);
+
 
     @Query("SELECT p FROM Post p WHERE p.user.name = :name")
     Page<Post> findFilteredPostsByUser(@Param("name") String name,Pageable pageable);

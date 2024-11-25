@@ -2,7 +2,6 @@ package io.mountblue.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,10 +17,11 @@ public class Post {
     private String title;
     private String excerpt;
     private String content;
-//    private String author;
+
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false) // Foreign key column
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
     private LocalDateTime publishedAt;
     private boolean isPublished;
     private LocalDateTime createdAt;

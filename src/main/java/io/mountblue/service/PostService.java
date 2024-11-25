@@ -7,7 +7,9 @@ import io.mountblue.model.Tags;
 import io.mountblue.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -84,7 +86,6 @@ public class PostService {
 //            return postRepository.findFilteredPostsByTagsAndDate(tags, startDate, endDate, pageable);
         }
 
-        // Default case: filter by date range
         return postRepository.filterByDate(startDate, endDate, pageable);
     }
 
@@ -167,5 +168,11 @@ public class PostService {
                 postRepository.save(post);
             }
         }
+    }
+
+    public Page<Post> sortPosts(int page, int size, String sortBy, boolean ascending) {
+        Sort sort = ascending ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return postRepository.findAll(pageable);
     }
 }

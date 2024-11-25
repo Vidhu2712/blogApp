@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "users") // Change table name to "users" or another non-reserved name
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
