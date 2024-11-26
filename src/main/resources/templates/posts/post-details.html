@@ -4,233 +4,187 @@
     <title>Post Details</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
         }
 
         .container {
-            max-width: 800px;
-            margin: 40px auto;
+            max-width: 900px;
+            margin: 30px auto;
             padding: 20px;
-            background: #ffffff;
-            border-radius: 15px;
-            border: 1px solid #d6d8db;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
+            margin: 0 0 20px;
+            font-size: 24px;
             text-align: center;
-            font-size: 32px;
-            color: #004d40;
-            font-weight: bold;
-            margin-bottom: 30px;
         }
 
         .post {
-            border-radius: 12px;
-            padding: 25px;
-            background: linear-gradient(120deg, #e8f5e9, #ffffff);
-            margin-bottom: 30px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
         }
 
         .post h2 {
-            font-size: 26px;
-            color: #2e7d32;
-            font-weight: bold;
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
         }
 
         .post p {
             margin: 10px 0;
-            font-size: 18px;
-            color: #37474f;
-            line-height: 1.6;
+            font-size: 14px;
+            color: #555;
         }
 
         .post .author,
         .post .date {
             font-size: 14px;
-            color: #607d8b;
+            color: #777;
         }
 
-        .tags {
-            margin-top: 15px;
-        }
-
-        .tags span {
+        .post .tags span {
             display: inline-block;
-            margin-right: 8px;
-            padding: 6px 12px;
-            background-color: #e8f0fe;
-            color: #1565c0;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
+            margin-right: 5px;
+            padding: 2px 6px;
+            background-color: #e7f3ff;
+            color: #007bff;
+            border-radius: 4px;
+            font-size: 12px;
         }
 
         .actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            justify-content: center;
+            margin-bottom: 20px;
         }
 
         .actions a,
         .actions button {
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
             text-decoration: none;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .actions a {
-            background-color: #004d40;
-            color: #fff;
-        }
-
-        .actions a:hover {
-            background-color: #002f29;
-        }
-
-        .actions button {
-            background-color: #d32f2f;
-            color: #fff;
-            border: none;
+            margin-right: 10px;
             cursor: pointer;
         }
 
-        .actions button:hover {
-            background-color: #b71c1c;
+        .actions button {
+            background-color: #dc3545;
         }
 
-        .comment-section {
-            margin-top: 40px;
+        .actions a:hover {
+            background-color: #0056b3;
+        }
+
+        .actions button:hover {
+            background-color: #c82333;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: 0;
+            border-top: 1px solid #ddd;
         }
 
         .comment-section h2 {
-            font-size: 24px;
-            color: #004d40;
-            margin-bottom: 20px;
+            margin: 0 0 20px;
+            font-size: 18px;
         }
 
         .comment {
-            border-radius: 10px;
-            padding: 20px;
-            background: #f7f9fc;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #fff;
             margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .comment strong {
-            color: #37474f;
-            font-size: 16px;
+            color: #333;
         }
 
         .comment p {
             margin: 5px 0;
-            font-size: 16px;
-            color: #455a64;
-        }
-
-        .comment-actions {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .comment-actions form button {
-            padding: 6px 12px;
             font-size: 14px;
-            border-radius: 5px;
-            font-weight: bold;
+            color: #555;
+        }
+
+        .comment form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .comment form button {
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            border: none;
+            background-color: #007bff;
+            color: white;
             cursor: pointer;
-            transition: all 0.3s;
         }
 
-        .comment-actions button.edit {
-            background-color: #1565c0;
-            color: #fff;
-            border: none;
+        .comment form button:hover {
+            background-color: #0056b3;
         }
 
-        .comment-actions button.edit:hover {
-            background-color: #0d47a1;
+        .comment form button.delete {
+            background-color: #dc3545;
         }
 
-        .comment-actions button.delete {
-            background-color: #d32f2f;
-            color: #fff;
-            border: none;
-        }
-
-        .comment-actions button.delete:hover {
-            background-color: #b71c1c;
-        }
-
-        .add-comment {
-            margin-top: 40px;
+        .comment form button.delete:hover {
+            background-color: #c82333;
         }
 
         .add-comment h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #004d40;
-        }
-
-        .add-comment form {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .add-comment input,
-        .add-comment button {
-            padding: 12px 15px;
-            border-radius: 8px;
+            margin: 20px 0;
             font-size: 16px;
-            font-weight: bold;
         }
 
-        .add-comment input {
-            flex: 1;
-            border: 1px solid #d6d8db;
-            background: #ffffff;
+        .add-comment form input,
+        .add-comment form button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-right: 10px;
         }
 
-        .add-comment button {
-            background-color: #2e7d32;
-            color: #fff;
-            border: none;
+        .add-comment form button {
+            background-color: #28a745;
+            color: white;
             cursor: pointer;
         }
 
-        .add-comment button:hover {
-            background-color: #1b5e20;
+        .add-comment form button:hover {
+            background-color: #218838;
         }
 
         .back-link {
-            display: block;
-            margin: 30px auto;
-            padding: 12px 20px;
-            width: max-content;
-            text-align: center;
-            border-radius: 8px;
-            background-color: #1565c0;
-            color: #fff;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            transition: all 0.3s;
         }
 
         .back-link:hover {
-            background-color: #0d47a1;
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -241,34 +195,39 @@
 
     <div class="post">
         <h2 th:text="*{post.getTitle()}">Post Title</h2>
-        <p th:text="*{post.getContent()}">Post Content</p>
+        <p th:text="${post.excerpt}"></p>
+        <p th:text="*{post.content}">Post Content</p>
+
         <p class="author"><strong>Author:</strong> <span th:text="*{post.user.getName()}">Author Name</span></p>
         <p class="date"><strong>Published on:</strong> <span th:text="*{post.getPublishedAt()}">Date</span></p>
         <div class="tags">
-            <span th:each="tag : ${post.tags}" th:text="${tag.name}"></span>
+            <span th:each="tag, iterStat : ${post.tags}" th:text="${tag.name}"></span>
         </div>
     </div>
-
-    <div th:if="${post.user.email == currentUser || isAdmin}" class="actions">
+    <div th:if="${post.user.email == currentUser || isAdmin}"  class="actions">
         <a th:href="@{'/update/' + ${post.id}}">Update Post</a>
-        <form th:action="@{/delete/{id}(id=${post.id})}" method="post"
-              onsubmit="return confirm('Are you sure you want to delete this post?');">
-            <button type="submit">Delete</button>
-        </form>
+        <div>
+            <br>
+            <form th:action="@{/delete/{id}(id=${post.id})}" method="post" onsubmit="
+        return confirm('Are you sure you want to delete this post?');">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
     </div>
-
+    <hr>
     <div class="comment-section">
         <h2>Comments</h2>
         <div th:each="comment : ${post.comments}" class="comment">
             <p><strong th:text="${comment.name}"></strong> (<span th:text="${comment.email}"></span>)</p>
             <p th:text="${comment.comment}"></p>
-            <div th:if="${#authentication.name == comment.email or #authentication.name == post.user.email || isAdmin}"
-                 class="comment-actions">
+            <div th:if="${#authentication.name == comment.email || #authentication.name == post.user.email
+                || isAdmin}">
                 <form th:action="@{/comments/{id}(id=${comment.id})}" method="post">
                     <input type="hidden" name="_method" value="PUT"/>
-                    <input type="text" name="message" placeholder="Edit comment"/>
+                    <input type="text" name="message" placeholder="Edit comment" />
                     <input type="hidden" name="postId" th:value="${post.id}"/>
-                    <button type="submit" class="edit">Edit</button>
+                    <button type="submit">Edit</button>
                 </form>
                 <form th:action="@{/comments/{id}(id=${comment.id})}" method="post">
                     <input type="hidden" name="_method" value="delete"/>
@@ -279,15 +238,16 @@
         </div>
     </div>
 
-    <div class="add-comment" th:if="${#authentication.name != 'anonymousUser'}">
-        <h3>Add a Comment</h3>
-        <form th:action="@{/comments}" method="post">
-            <input type="hidden" name="postId" th:value="${post.id}"/>
-            <input type="text" name="message" placeholder="Add a comment" required/>
-            <button type="submit">Submit</button>
-        </form>
+    <div class="add-comment">
+        <div th:if="${#authentication.name !='anonymousUser'}">
+            <h3>Add a Comment</h3>
+            <form th:action="@{/comments}" method="post">
+                <input type="hidden" name="postId" th:value="${post.id}" />
+                <input type="text" name="message" placeholder="Add a comment" required />
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     </div>
-
     <a href="/" class="back-link">Back to Posts List</a>
 </div>
 

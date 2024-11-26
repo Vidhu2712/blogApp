@@ -10,7 +10,7 @@
     </parent>
     <groupId>io.mountblue</groupId>
     <artifactId>blog-application</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1-BETA</version>
     <name>blog-application</name>
     <description>blog-application</description>
     <url/>
