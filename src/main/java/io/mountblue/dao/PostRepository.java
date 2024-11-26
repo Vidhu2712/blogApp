@@ -21,51 +21,24 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     List<Post> findAllByOrderByPublishedAtAsc();
 
     @Query(value = "SELECT p.* FROM post p " +
+            "JOIN users u ON p.user_id = u.id " +
             "WHERE to_tsvector('english', p.title || ' ' || p.content) " +
             " @@ to_tsquery('english', replace(:query, ' ', ' & ')) " +
             "OR EXISTS (SELECT 1 FROM post_tags pt " +
             "JOIN tags t ON pt.tag_id = t.id " +
             "WHERE pt.post_id = p.id " +
-            "AND to_tsvector('english', t.name) @@ to_tsquery('english', replace(:query, ' ', ' & ')))",
+            "AND to_tsvector('english', t.name) @@ to_tsquery('english', replace(:query, ' ', ' & '))) " +
+            "OR to_tsvector('english', u.name) @@ to_tsquery('english', replace(:query, ' ', ' & '))",
             nativeQuery = true)
     Page<Post> searchPosts(@Param("query") String query, Pageable pageable);
 
-    @Query("SELECT p FROM Post p WHERE " +
-            "(cast(:startDate as timestamp) IS NULL OR p.publishedAt >= :startDate) AND " +
-            "(cast(:endDate as timestamp) IS NULL OR p.publishedAt <= :endDate)")
-    Page<Post> filterByDate(@Param("startDate") LocalDateTime startDate,
-                            @Param("endDate") LocalDateTime endDate,
-                            Pageable pageable);
-
-
-    @Query("SELECT p FROM Post p WHERE p.user.name = :name")
-    Page<Post> findFilteredPostsByUser(@Param("name") String name,Pageable pageable);
-
-    @Query("SELECT p FROM Post p JOIN p.tags t WHERE t.name = :name")
-    Page<Post> findFilteredPostsByTags(@Param("name") String name,Pageable pageable);
-
-    @Query("SELECT p FROM Post p JOIN p.tags t WHERE p.user.name = :author AND t.name = :tag " +
-            "AND p.publishedAt BETWEEN :startDate AND :endDate")
-    Page<Post> findByUserAndTagsAndDate(
-        @Param("author") String author,
-        @Param("tag") String tag,
-        @Param("startDate") LocalDateTime startDate,
-        @Param("endDate") LocalDateTime endDate,
-        Pageable pageable);
-
-    @Query("SELECT p FROM Post p WHERE p.user.name = :author AND p.publishedAt BETWEEN :startDate AND :endDate")
-    Page<Post> findFilteredPostsByUserAndDate(@Param("author") String author,
-                                              @Param("startDate") LocalDateTime startDate,
-                                              @Param("endDate") LocalDateTime endDate,
-                                              Pageable pageable);
-
-    @Query("SELECT p FROM Post p JOIN p.tags t WHERE " +
-            "(:tags IS NULL OR t.name IN :tags) " +
-            "AND (:startDate IS NULL OR p.publishedAt >= :startDate) " +
-            "AND (:endDate IS NULL OR p.publishedAt <= :endDate)")
-    Page<Post> findFilteredPostsByTagsAndDate(
-            @Param("tags") List<String> tags,
-            @Param("startDate") LocalDateTime startDate,
-            @Param("endDate") LocalDateTime endDate,
-            Pageable pageable);
+    @Query("SELECT p FROM Post p " +
+            "WHERE (:authorNames IS NULL OR p.user.name IN :authorNames) " +
+            "AND (p.createdAt BETWEEN :startDate AND :endDate) " +
+            "AND (:tagNames IS NULL OR EXISTS (SELECT t FROM p.tags t WHERE t.name IN :tagNames))")
+    Page<Post> filterPosts(@Param("authorNames") List<String> authorNames,
+                           @Param("startDate") LocalDateTime startDate,
+                           @Param("endDate") LocalDateTime endDate,
+                           @Param("tagNames") List<String> tagNames,
+                           Pageable pageable);
 }

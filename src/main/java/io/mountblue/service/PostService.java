@@ -42,52 +42,26 @@ public class PostService {
         return postRepository.findById(id).orElse(null);
     }
 
-    public Page<Post> getFilteredPosts(User user, String tags, LocalDateTime startDate,
-                                       LocalDateTime endDate,Pageable pageable) {
-        String author = (user != null) ? user.getName() : null;
-        System.out.println(tags);
+    public Page<Post> filterPosts(String authorNames, String startDate, String endDate,
+                                  String tagNames, Pageable pageable) {
 
+        List<String> authorNameList = (authorNames != null && !authorNames.trim().isEmpty())
+                ? List.of(authorNames.split(",\\s*"))
+                : null;
 
-        // If no filters are provided, return all posts
-        if (author == null && (tags == null || tags.isEmpty()) && startDate == null && endDate == null) {
-            return postRepository.findAll(pageable);
-        }
+        List<String> tagNameList = (tagNames != null && !tagNames.trim().isEmpty())
+                ? List.of(tagNames.split(",\\s*"))
+                : null;
 
-        // Filter by user only
-        if (author != null && (tags == null || tags.isEmpty()) && startDate == null && endDate == null) {
-            return postRepository.findFilteredPostsByUser(author, pageable);
-        }
+        LocalDateTime startDateTime = (startDate != null && !startDate.trim().isEmpty())
+                ? LocalDateTime.parse(startDate + "T00:00:00")
+                : LocalDateTime.of(2024, 1, 1, 0, 0);
 
-        // Filter by date only
-        if (author == null && (tags == null || tags.isEmpty())) {
-            return postRepository.filterByDate(startDate, endDate, pageable);
-        }
+        LocalDateTime endDateTime = (endDate != null && !endDate.trim().isEmpty())
+                ? LocalDateTime.parse(endDate + "T23:59:59")
+                : LocalDateTime.now();
 
-        // Filter by tags only
-        if (tags != null && !tags.isEmpty() && author == null && startDate == null && endDate == null) {
-            return postRepository.findFilteredPostsByTags(tags, pageable);
-        }
-
-        // Filter by author and tags
-        if (author != null && tags != null && !tags.isEmpty()) {
-            return postRepository.findByUserAndTagsAndDate(author, tags, startDate, endDate, pageable);
-        }
-
-        // Filter by author and date range
-        if (author != null && startDate != null && endDate != null) {
-            return postRepository.findFilteredPostsByUserAndDate(author, startDate, endDate, pageable);
-        }
-
-        // Filter by tags and date range
-        if (tags != null && !tags.isEmpty() && startDate != null && endDate != null) {
-            List<String> tagList = tags != null ? Arrays.asList(tags.split(",")) : null;
-
-            // Call the repository method
-            return postRepository.findFilteredPostsByTagsAndDate(tagList, startDate, endDate, pageable);
-//            return postRepository.findFilteredPostsByTagsAndDate(tags, startDate, endDate, pageable);
-        }
-
-        return postRepository.filterByDate(startDate, endDate, pageable);
+        return postRepository.filterPosts(authorNameList, startDateTime, endDateTime, tagNameList, pageable);
     }
 
     public List<Post> getAllPostsSortedByPublishedDateDesc() {
@@ -102,7 +76,6 @@ public class PostService {
         return postRepository.searchPosts(query,pageable);
     }
 
-
     public void delete(UUID id) {
         postRepository.deleteById(id);
     }
@@ -111,7 +84,7 @@ public class PostService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUserByEmail(userDetails.getUsername());
 
-        if ((user != null && user.getRole().equals("USER")) || (user!=null && user.getRole().equals("ADMIN"))) {
+        if ((user != null && user.getRole().equals("USER")) ||  (user!=null && user.getRole().equals("ADMIN"))) {
             post.setUser(user);
             post.setPublished(true);
         }
@@ -130,7 +103,7 @@ public class PostService {
         postRepository.save(post);
     }
     public void updatePostTags(UUID postId, String tagsInput) {
-          Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
         User user = userService.getUserByEmail(username);
@@ -146,7 +119,7 @@ public class PostService {
             Set<Tags> updatedTags = new HashSet<>();
             for (String tagName : tagNames) {
                 Tags tag = tagRepository.findByName(tagName);
-                if(tag==null){
+                if (tag == null) {
                     tag = new Tags();
                     tag.setName(tagName);
                     tagRepository.save(tag);
@@ -164,7 +137,7 @@ public class PostService {
         String username = authentication.getName();
 
         User user = userService.getUserByEmail(username);
-        if ((user != null && user.getRole().equals("USER")) || (user!=null && user.getRole().equals("ADMIN"))) {
+        if (user != null && user.getRole().equals("USER") || (user!=null && user.getRole().equals("ADMIN"))) {
             Optional<Post> optionalPost = postRepository.findById(uuid);
             if (optionalPost.isPresent()) {
                 Post post = optionalPost.get();

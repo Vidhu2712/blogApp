@@ -1,28 +1,23 @@
 package io.mountblue.controller;
+
 import io.mountblue.dao.UserRepository;
+import io.mountblue.exception.ResourceNotFoundException;
 import io.mountblue.model.Comment;
 import io.mountblue.model.Post;
-import io.mountblue.model.Tags;
-import io.mountblue.model.User;
 import io.mountblue.service.CommentService;
 import io.mountblue.service.PostService;
 import io.mountblue.service.TagService;
 import io.mountblue.service.UserService;
-import jakarta.persistence.PreUpdate;
-import org.hibernate.annotations.Fetch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,16 +28,10 @@ public class PostController {
     private PostService postService;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
     private CommentService commentService;
-
-    @Autowired
-    private TagService tagService;
 
     @GetMapping
     public String getAllPosts(@RequestParam(defaultValue = "0") int page,
@@ -71,16 +60,19 @@ public class PostController {
 
     @GetMapping("/{id}")
     public String getPostDetails(@PathVariable UUID id, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
 
         Post post = postService.getPostById(id);
-        List<Comment> comments = commentService.getAllComment(id);
+        if (post == null) {
+            throw new ResourceNotFoundException("Post with ID " + id + " not found.");
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
         boolean isAdmin = userService.isAdmin();
+        List<Comment> comments = commentService.getAllComment(id);
         model.addAttribute("post", post);
         model.addAttribute("currentUser", currentUsername);
         model.addAttribute("comment", comments);
-        model.addAttribute("isAdmin",isAdmin);
+        model.addAttribute("isAdmin", isAdmin);
         return "posts/post-details";
     }
 
@@ -91,35 +83,20 @@ public class PostController {
     }
 
     @GetMapping("/filter")
-    public String filterPosts(@RequestParam(required = false) String author,
-                              @RequestParam(required = false) String tag,
-                              @RequestParam(required = false)
-                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                              @RequestParam(required = false)
-                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                              @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size,
-                              Model model) {
+    public String filters(@RequestParam(required = false) String author,
+                          @RequestParam(required = false) String startDate,
+                          @RequestParam(required = false) String endDate,
+                          @RequestParam(required = false) String tag,
+                          @RequestParam(defaultValue = "0") int page,
+                          @RequestParam(defaultValue = "10") int size,
+                          Model model) {
 
-        LocalDateTime startDateTime = (startDate != null) ? startDate.atStartOfDay() : null;
-        LocalDateTime endDateTime = (endDate != null) ? endDate.atStartOfDay().plusDays(1).minusNanos(1) : null;
-        User user = null;
-        if (author != null && !author.isEmpty()) {
-            user = userService.findByUsername(author);
-            if (user == null) {
-                model.addAttribute("error", "No user found with the username: " + author);
-                return "posts/list";
-            }
-        }
         Pageable pageable = PageRequest.of(page, size);
-        Page<Post> filteredPosts = postService.getFilteredPosts(user, tag, startDateTime, endDateTime, pageable);
-        model.addAttribute("posts", filteredPosts.getContent());
-        model.addAttribute("totalPages", filteredPosts.getTotalPages());
+        Page<Post> postPage = postService.filterPosts(author, startDate, endDate, tag, pageable);
+
+        model.addAttribute("posts", postPage.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("author", author);
-        model.addAttribute("tag", tag);
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
+        model.addAttribute("totalPages", postPage.getTotalPages());
         return "posts/list";
     }
 
@@ -147,7 +124,6 @@ public class PostController {
         return "posts/list";
     }
 
-
     @GetMapping("/update/{id}")
     public String updatePostForm(@PathVariable UUID id, Model model) {
         Post post = postService.getPostById(id);
@@ -167,14 +143,30 @@ public class PostController {
                              @RequestParam("title") String title,
                              @RequestParam("excerpt") String excerpt,
                              @RequestParam("content") String content, Model model) {
-        UUID uuid = UUID.fromString(id);
-        boolean isAdmin = userService.isAdmin();
-        Post post = postService.getPostById(uuid);
-        postService.updatePost(uuid, title, excerpt, content);
-        postService.updatePostTags(uuid, tagsInput);
-        model.addAttribute("post", post);
-        model.addAttribute("isAdmin", isAdmin);
-        return "posts/post-details";
+        try {
+            UUID uuid = UUID.fromString(id);
+            Post post = postService.getPostById(uuid);
+            if (post == null) {
+                throw new ResourceNotFoundException("Post with ID " + id + " not found.");
+            }
+            postService.updatePost(uuid, title, excerpt, content);
+            postService.updatePostTags(uuid, tagsInput);
+
+            boolean isAdmin = userService.isAdmin();
+            model.addAttribute("post", post);
+            model.addAttribute("isAdmin", isAdmin);
+            return "posts/post-details";
+
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", "Invalid post ID format.");
+            return "error/400";
+        } catch (ResourceNotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error/404";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "An unexpected error occurred. Please try again.");
+            return "error/500";
+        }
     }
 
     @GetMapping("/sort")
@@ -185,7 +177,6 @@ public class PostController {
             @RequestParam(defaultValue = "true") boolean ascending,
             Model model) {
         Page<Post> sortedPosts = postService.sortPosts(page, size, sortBy, ascending);
-
         model.addAttribute("posts", sortedPosts.getContent());
         model.addAttribute("currentPage", sortedPosts.getNumber());
         model.addAttribute("totalPages", sortedPosts.getTotalPages());

@@ -10,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,24 +19,13 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-    public Optional<User> getUserById(UUID id) {
-        return userRepository.findById(id);
-    }
-
     public User saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
     public void deleteUser(UUID id) {
-         userRepository.deleteById(id);
-    }
-
-    public User findByUsername(String authorName) {
-        return userRepository.findByName(authorName);
+        userRepository.deleteById(id);
     }
 
     public User getUserByEmail(String email) {
@@ -54,24 +41,21 @@ public class UserService {
         }
         return null;
     }
-    public boolean isAdmin() {
-        // Get the current logged-in user's email
+    public boolean isAdmin(){
         String email = getCurrentUserEmail();
-
-        // Fetch the user from the database
         User user = userRepository.findByEmail(email);
-
-        // Check if the user exists and has the 'ADMIN' role
-        return user != null && "ADMIN".equals(user.getRole());
+        return user!=null && "ADMIN".equals(user.getRole());
+    }
+    private String getCurrentUserEmail(){
+        Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principle instanceof UserDetails){
+            return ((UserDetails) principle).getUsername();
+        }else{
+            return principle.toString();
+        }
     }
 
-    public String getCurrentUserEmail() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
-        } else {
-            return principal.toString();
-        }
+    public boolean existsById(UUID id) {
+        return userRepository.existsById(id);
     }
 }
