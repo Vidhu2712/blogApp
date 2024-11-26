@@ -14,8 +14,6 @@ import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, UUID> {
 
-
-
     @Query("SELECT p FROM Post p ORDER BY p.publishedAt DESC")
     List<Post> findAllByOrderByPublishedAtDesc();
 
@@ -31,12 +29,6 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
             "AND to_tsvector('english', t.name) @@ to_tsquery('english', replace(:query, ' ', ' & ')))",
             nativeQuery = true)
     Page<Post> searchPosts(@Param("query") String query, Pageable pageable);
-
-
-//    @Query("SELECT p FROM Post p WHERE p.publishedAt BETWEEN :startDate AND :endDate")
-//    Page<Post> filterByDate(@Param("startDate") LocalDateTime startDate,
-//                            @Param("endDate") LocalDateTime endDate,
-//                            Pageable pageable);
 
     @Query("SELECT p FROM Post p WHERE " +
             "(cast(:startDate as timestamp) IS NULL OR p.publishedAt >= :startDate) AND " +

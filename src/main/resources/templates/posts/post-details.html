@@ -251,7 +251,8 @@
 
     <div th:if="${post.user.email == currentUser || isAdmin}" class="actions">
         <a th:href="@{'/update/' + ${post.id}}">Update Post</a>
-        <form th:action="@{/delete/{id}(id=${post.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete this post?');">
+        <form th:action="@{/delete/{id}(id=${post.id})}" method="post"
+              onsubmit="return confirm('Are you sure you want to delete this post?');">
             <button type="submit">Delete</button>
         </form>
     </div>
@@ -261,7 +262,8 @@
         <div th:each="comment : ${post.comments}" class="comment">
             <p><strong th:text="${comment.name}"></strong> (<span th:text="${comment.email}"></span>)</p>
             <p th:text="${comment.comment}"></p>
-            <div th:if="${#authentication.name == comment.email or #authentication.name == post.user.email || isAdmin}" class="comment-actions">
+            <div th:if="${#authentication.name == comment.email or #authentication.name == post.user.email || isAdmin}"
+                 class="comment-actions">
                 <form th:action="@{/comments/{id}(id=${comment.id})}" method="post">
                     <input type="hidden" name="_method" value="PUT"/>
                     <input type="text" name="message" placeholder="Edit comment"/>

@@ -65,11 +65,6 @@ public class UserService {
         return user != null && "ADMIN".equals(user.getRole());
     }
 
-    /**
-     * Retrieves the current logged-in user's email from the security context.
-     *
-     * @return the email of the logged-in user
-     */
     public String getCurrentUserEmail() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

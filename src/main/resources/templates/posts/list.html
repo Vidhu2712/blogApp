@@ -187,14 +187,14 @@
 <div class="container">
     <div class="action-bar">
         <form th:action="@{/search}" method="get">
-            <input type="text" id="query" name="query" th:value="${query}" placeholder="Search by title or content" />
+            <input type="text" id="query" name="query" th:value="${query}" placeholder="Search by title or content"/>
             <button type="submit">Search</button>
         </form>
         <form th:action="@{/filter}" method="get">
-            <input type="text" id="author" name="author" th:value="${author}" placeholder="Filter by author" />
-            <input type="text" id="tag" name="tag" th:value="${tag != null ? tag : ''}" placeholder="Filter by tags" />
-            <input type="date" id="startDate" name="startDate" th:value="${startDate}" />
-            <input type="date" id="endDate" name="endDate" th:value="${endDate}" />
+            <input type="text" id="author" name="author" th:value="${author}" placeholder="Filter by author"/>
+            <input type="text" id="tag" name="tag" th:value="${tag != null ? tag : ''}" placeholder="Filter by tags"/>
+            <input type="date" id="startDate" name="startDate" th:value="${startDate}"/>
+            <input type="date" id="endDate" name="endDate" th:value="${endDate}"/>
             <button type="submit">Filter</button>
         </form>
     </div>
@@ -225,7 +225,8 @@
     <ul>
         <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
             th:classappend="${i == currentPage} ? 'active' : ''">
-            <a th:href="@{'/filter'(page=${i}, size=${size}, author=${author}, tag=${tag}, startDate=${startDate}, endDate=${endDate})}"
+            <a th:href="@{'/filter'(page=${i}, size=${size}, author=${author}, tag=${tag}, startDate=${startDate},
+            endDate=${endDate})}"
                th:text="${i + 1}"></a>
         </li>
     </ul>

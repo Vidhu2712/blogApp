@@ -18,7 +18,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -26,7 +27,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers( "/blog/**", "/posts/**","/posts/delete/{id}").hasAnyRole("USER","ADMIN")
+                        .requestMatchers( "/blog/**", "/posts/**","/posts/delete/{id}").
+                        hasAnyRole("USER","ADMIN")
                         .requestMatchers("/create", "/edit/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().permitAll()
                 )

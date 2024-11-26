@@ -93,14 +93,16 @@ public class PostController {
     @GetMapping("/filter")
     public String filterPosts(@RequestParam(required = false) String author,
                               @RequestParam(required = false) String tag,
-                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                              @RequestParam(required = false)
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                              @RequestParam(required = false)
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size,
                               Model model) {
 
         LocalDateTime startDateTime = (startDate != null) ? startDate.atStartOfDay() : null;
-        LocalDateTime endDateTime = (endDate != null) ? endDate.atStartOfDay().plusDays(1).minusNanos(1) : null; // Include full end date
+        LocalDateTime endDateTime = (endDate != null) ? endDate.atStartOfDay().plusDays(1).minusNanos(1) : null;
         User user = null;
         if (author != null && !author.isEmpty()) {
             user = userService.findByUsername(author);
@@ -166,11 +168,7 @@ public class PostController {
                              @RequestParam("excerpt") String excerpt,
                              @RequestParam("content") String content, Model model) {
         UUID uuid = UUID.fromString(id);
-//        String currentUserEmail = principal.getName();
-//        boolean isAdmin = userService.isAdmin(currentUserEmail);
-        boolean isAdmin = userService.isAdmin(); // Check if the current user is an admin
-//        String currentUserEmail = userService.getCurrentUserEmail(); // Get the logged-in user's email
-
+        boolean isAdmin = userService.isAdmin();
         Post post = postService.getPostById(uuid);
         postService.updatePost(uuid, title, excerpt, content);
         postService.updatePostTags(uuid, tagsInput);
@@ -187,7 +185,6 @@ public class PostController {
             @RequestParam(defaultValue = "true") boolean ascending,
             Model model) {
         Page<Post> sortedPosts = postService.sortPosts(page, size, sortBy, ascending);
-
 
         model.addAttribute("posts", sortedPosts.getContent());
         model.addAttribute("currentPage", sortedPosts.getNumber());

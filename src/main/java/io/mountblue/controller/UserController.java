@@ -31,7 +31,6 @@ public class UserController {
         return "redirect:/login";
     }
 
-
     @GetMapping
     public String getAllUsers(Model model) {
         List<User> users = userService.getAllUsers();
@@ -45,7 +44,6 @@ public class UserController {
         model.addAttribute("user", user);
         return "users/detail";
     }
-
 
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") UUID id) {
