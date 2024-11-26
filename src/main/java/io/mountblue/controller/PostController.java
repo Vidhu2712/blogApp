@@ -1,5 +1,4 @@
 package io.mountblue.controller;
-
 import io.mountblue.dao.UserRepository;
 import io.mountblue.model.Comment;
 import io.mountblue.model.Post;

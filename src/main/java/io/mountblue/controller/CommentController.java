@@ -18,7 +18,6 @@ public class CommentController {
     public String addComment(@RequestParam String message, @RequestParam String postId) {
         UUID uuid = UUID.fromString(postId);
         commentService.addComment(message , uuid);
-
         return "redirect:/" + postId;
     }
     @PutMapping("/{id}")
