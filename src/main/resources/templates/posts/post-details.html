@@ -198,6 +198,9 @@
         <p th:text="*{post.getContent()}">Post Content</p>
         <p class="author"><strong>Author:</strong> <span th:text="*{post.user.getName()}">Author Name</span></p>
         <p class="date"><strong>Published on:</strong> <span th:text="*{post.getPublishedAt()}">Date</span></p>
+        <div class="tags">
+            <span th:each="tag, iterStat : ${post.tags}" th:text="${tag.name}"></span>
+        </div>
     </div>
 
     <div th:text="${post.user.role}"></div>
@@ -217,7 +220,7 @@
         <div th:each="comment : ${post.comments}" class="comment">
             <p><strong th:text="${comment.name}"></strong> (<span th:text="${comment.email}"></span>)</p>
             <p th:text="${comment.comment}"></p>
-            <div th:if="${#authentication.name == comment.email or #authentication.name == post.user.email}">
+            <div th:if="${#authentication.name == comment.email or #authentication.name == post.user.email || isAdmin}">
                 <form th:action="@{/comments/{id}(id=${comment.id})}" method="post">
                     <input type="hidden" name="_method" value="PUT"/>
                     <input type="text" name="message" placeholder="Edit comment" />

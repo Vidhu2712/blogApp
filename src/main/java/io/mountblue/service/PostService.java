@@ -42,7 +42,8 @@ public class PostService {
         return postRepository.findById(id).orElse(null);
     }
 
-    public Page<Post> getFilteredPosts(User user, String tags, LocalDateTime startDate, LocalDateTime endDate,Pageable pageable) {
+    public Page<Post> getFilteredPosts(User user, String tags, LocalDateTime startDate,
+                                       LocalDateTime endDate,Pageable pageable) {
         String author = (user != null) ? user.getName() : null;
         System.out.println(tags);
 
@@ -145,6 +146,11 @@ public class PostService {
             Set<Tags> updatedTags = new HashSet<>();
             for (String tagName : tagNames) {
                 Tags tag = tagRepository.findByName(tagName);
+                if(tag==null){
+                    tag = new Tags();
+                    tag.setName(tagName);
+                    tagRepository.save(tag);
+                }
                 updatedTags.add(tag);
             }
 

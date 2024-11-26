@@ -177,7 +177,7 @@ public class PostController {
         postService.updatePostTags(uuid, tagsInput);
         model.addAttribute("post", post);
         model.addAttribute("isAdmin", isAdmin);
-        return "redirect:/";
+        return "posts/post-details";
     }
 
     @GetMapping("/sort")
