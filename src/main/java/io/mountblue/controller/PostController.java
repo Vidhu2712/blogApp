@@ -34,7 +34,7 @@ public class PostController {
     private CommentService commentService;
 
     @GetMapping
-    public String getAllPosts(@RequestParam(defaultValue = "0") int page,
+    public String fetchAllPosts(@RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size, Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Post> posts = postService.getAllPosts(pageable);
@@ -83,7 +83,7 @@ public class PostController {
     }
 
     @GetMapping("/filter")
-    public String filters(@RequestParam(required = false) String author,
+    public String filter(@RequestParam(required = false) String author,
                           @RequestParam(required = false) String startDate,
                           @RequestParam(required = false) String endDate,
                           @RequestParam(required = false) String tag,
@@ -102,7 +102,7 @@ public class PostController {
 
 
     @GetMapping("/posts")
-    public String getAllPosts(@RequestParam(defaultValue = "asc") String sort, Model model) {
+    public String getAllPostsBySorting(@RequestParam(defaultValue = "asc") String sort, Model model) {
         if ("desc".equalsIgnoreCase(sort)) {
             model.addAttribute("posts", postService.getAllPostsSortedByPublishedDateDesc());
         } else {
@@ -125,7 +125,7 @@ public class PostController {
     }
 
     @GetMapping("/update/{id}")
-    public String updatePostForm(@PathVariable UUID id, Model model) {
+    public String updatePost(@PathVariable UUID id, Model model) {
         Post post = postService.getPostById(id);
         model.addAttribute("post", post);
 
