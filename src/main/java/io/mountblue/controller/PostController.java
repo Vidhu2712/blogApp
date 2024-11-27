@@ -49,7 +49,7 @@ public class PostController {
     @GetMapping("/create")
     public String showCreatePostForm(Model model) {
         model.addAttribute("post", new Post());
-        return "posts/create-post";
+        return "posts/postcreate";
     }
 
     @PostMapping("/create")
@@ -73,7 +73,7 @@ public class PostController {
         model.addAttribute("currentUser", currentUsername);
         model.addAttribute("comment", comments);
         model.addAttribute("isAdmin", isAdmin);
-        return "posts/post-details";
+        return "posts/detailsofpost";
     }
 
     @DeleteMapping("/delete/{id}")
@@ -134,7 +134,7 @@ public class PostController {
                 .collect(Collectors.joining(", "));
         model.addAttribute("tagsInput", tagsString);
 
-        return "posts/post-update";
+        return "posts/updatepost";
     }
 
     @PostMapping("/update")
@@ -155,7 +155,7 @@ public class PostController {
             boolean isAdmin = userService.isAdmin();
             model.addAttribute("post", post);
             model.addAttribute("isAdmin", isAdmin);
-            return "posts/post-details";
+            return "posts/detailsofpost";
 
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", "Invalid post ID format.");

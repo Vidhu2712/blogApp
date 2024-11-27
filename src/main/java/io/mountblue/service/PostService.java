@@ -92,7 +92,6 @@ public class PostService {
         if (tagsName != null && !tagsName.isEmpty()) {
             String[] tagNames = tagsName.split(",");
             Set<Tags> tagsSet = new HashSet<>();
-
             for (String tagName : tagNames) {
                 tagName = tagName.trim();
                 Tags tag = tagService.getOrCreateTag(tagName);
