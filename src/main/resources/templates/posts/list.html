@@ -5,115 +5,113 @@
     <title>Blog Posts</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            background-color: #fff;
+            color: #000;
         }
 
         header {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #000;
+            color: #fff;
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         header h1 {
             margin: 0;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 20px;
         }
 
         header h1 a {
             text-decoration: none;
-            color: white;
+            color: #fff;
         }
 
         header .auth-buttons a {
             text-decoration: none;
-            color: white;
-            margin-left: 15px;
-            padding: 8px 15px;
-            background-color: #388E3C;
-            border-radius: 5px;
-            font-size: 14px;
+            color: #000;
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #fff;
+            border: 1px solid #000;
+            font-size: 12px;
+            border-radius: 3px;
         }
 
         header .auth-buttons a:hover {
-            background-color: #2E7D32;
+            background-color: #000;
+            color: #fff;
         }
 
         .container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #000;
         }
 
         .action-bar {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
         .action-bar form {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 5px;
         }
 
         .action-bar input,
-        .action-bar button {
-            padding: 10px 15px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        .action-bar button,
+        .action-bar select {
+            padding: 5px 10px;
+            font-size: 12px;
+            border: 1px solid #000;
+            border-radius: 3px;
         }
 
         .action-bar button {
-            background-color: #2196F3;
-            color: white;
-            border: none;
+            background-color: #000;
+            color: #fff;
             cursor: pointer;
         }
 
         .action-bar button:hover {
-            background-color: #1976D2;
+            background-color: #333;
         }
 
         .post {
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            background-color: #f9f9f9;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border: 1px solid #000;
+            border-radius: 3px;
+            margin-bottom: 15px;
         }
 
         .post h2 {
             margin: 0;
-            font-size: 22px;
+            font-size: 18px;
         }
 
         .post h2 a {
             text-decoration: none;
-            color: #4CAF50;
+            color: #000;
         }
 
         .post h2 a:hover {
-            color: #388E3C;
+            text-decoration: underline;
         }
 
         .post p {
-            margin: 10px 0;
-            font-size: 14px;
+            margin: 5px 0;
+            font-size: 12px;
         }
 
         .tags {
@@ -122,21 +120,21 @@
 
         .tags span {
             display: inline-block;
-            margin-right: 8px;
-            padding: 5px 10px;
-            background-color: #e8f5e9;
-            color: #388E3C;
-            border-radius: 5px;
-            font-size: 13px;
+            margin-right: 5px;
+            padding: 2px 5px;
+            background-color: #eaeaea;
+            color: #000;
+            font-size: 10px;
+            border: 1px solid #000;
+            border-radius: 3px;
         }
 
         footer {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #000;
+            color: #fff;
             text-align: center;
-            padding: 15px 0;
-            margin-top: 20px;
-            font-size: 14px;
+            padding: 10px;
+            font-size: 12px;
         }
 
         nav ul {
@@ -144,6 +142,7 @@
             justify-content: center;
             list-style: none;
             padding: 0;
+            margin: 10px 0;
         }
 
         nav ul li {
@@ -151,20 +150,16 @@
         }
 
         nav ul li a {
-            display: block;
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 5px;
             text-decoration: none;
-        }
-
-        nav ul li a:hover {
-            background-color: #388E3C;
+            color: #000;
+            padding: 5px 10px;
+            border: 1px solid #000;
+            border-radius: 3px;
         }
 
         nav ul li.active a {
-            background-color: #1B5E20;
+            background-color: #000;
+            color: #fff;
         }
     </style>
 </head>
@@ -179,7 +174,7 @@
         </div>
         <div th:if="${#authentication.name !='anonymousUser'}">
             <a href="/logout">Logout</a>
-            <a href="/create" class="create-post" style="background-color: #FFC107;">Create Post</a>
+            <a href="/create" class="create-post" style="border: 1px solid #000;">Create Post</a>
         </div>
     </div>
 </header>
@@ -187,14 +182,14 @@
 <div class="container">
     <div class="action-bar">
         <form th:action="@{/search}" method="get">
-            <input type="text" id="query" name="query" th:value="${query}" placeholder="Search by title or content"/>
+            <input type="text" id="query" name="query" th:value="${query}" placeholder="Search by title or content" />
             <button type="submit">Search</button>
         </form>
         <form th:action="@{/filter}" method="get">
-            <input type="text" id="author" name="author" th:value="${author}" placeholder="Filter by author"/>
-            <input type="text" id="tag" name="tag" th:value="${tag != null ? tag : ''}" placeholder="Filter by tags"/>
-            <input type="date" id="startDate" name="startDate" th:value="${startDate}"/>
-            <input type="date" id="endDate" name="endDate" th:value="${endDate}"/>
+            <input type="text" id="author" name="author" th:value="${author}" placeholder="Filter by author" />
+            <input type="text" id="tag" name="tag" th:value="${tag != null ? tag : ''}" placeholder="Filter by tags" />
+            <input type="date" id="startDate" name="startDate" th:value="${startDate}" />
+            <input type="date" id="endDate" name="endDate" th:value="${endDate}" />
             <button type="submit">Filter</button>
         </form>
     </div>
@@ -225,8 +220,7 @@
     <ul>
         <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
             th:classappend="${i == currentPage} ? 'active' : ''">
-            <a th:href="@{'/filter'(page=${i}, size=${size}, author=${author}, tag=${tag}, startDate=${startDate},
-            endDate=${endDate})}"
+            <a th:href="@{'/filter'(page=${i}, size=${size}, author=${author}, tag=${tag}, startDate=${startDate}, endDate=${endDate})}"
                th:text="${i + 1}"></a>
         </li>
     </ul>
