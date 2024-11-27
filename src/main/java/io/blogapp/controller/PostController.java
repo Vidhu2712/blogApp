@@ -159,5 +159,4 @@ public class PostController {
         model.addAttribute("ascending", ascending);
         return "posts/list";
     }
-
 }
