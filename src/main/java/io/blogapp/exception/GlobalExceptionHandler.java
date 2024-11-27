@@ -1,4 +1,4 @@
-package io.mountblue.exception;
+package io.blogapp.exception;
 
 
 import org.springframework.http.HttpStatus;

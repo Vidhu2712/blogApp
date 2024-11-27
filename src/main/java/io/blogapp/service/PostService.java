@@ -1,10 +1,10 @@
-package io.mountblue.service;
+package io.blogapp.service;
 
-import io.mountblue.dao.PostRepository;
-import io.mountblue.dao.TagRepository;
-import io.mountblue.model.Post;
-import io.mountblue.model.Tags;
-import io.mountblue.model.User;
+import io.blogapp.dao.PostRepository;
+import io.blogapp.dao.TagRepository;
+import io.blogapp.model.Post;
+import io.blogapp.model.Tags;
+import io.blogapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

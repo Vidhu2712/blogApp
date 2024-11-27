@@ -1,6 +1,6 @@
-package io.mountblue.dao;
+package io.blogapp.dao;
 
-import io.mountblue.model.Post;
+import io.blogapp.model.Post;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

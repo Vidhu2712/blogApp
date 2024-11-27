@@ -1,6 +1,6 @@
-package io.mountblue.dao;
+package io.blogapp.dao;
 
-import io.mountblue.model.Comment;
+import io.blogapp.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,9 +1,9 @@
-package io.mountblue.service;
+package io.blogapp.service;
 
-import io.mountblue.dao.CommentRepository;
-import io.mountblue.dao.PostRepository;
-import io.mountblue.model.Comment;
-import io.mountblue.model.User;
+import io.blogapp.dao.CommentRepository;
+import io.blogapp.dao.PostRepository;
+import io.blogapp.model.Comment;
+import io.blogapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

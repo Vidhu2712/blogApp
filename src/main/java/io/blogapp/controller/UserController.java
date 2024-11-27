@@ -1,9 +1,9 @@
-package io.mountblue.controller;
+package io.blogapp.controller;
 
-import io.mountblue.exception.UserNotFoundException;
-import io.mountblue.exception.UserRegistrationException;
-import io.mountblue.model.User;
-import io.mountblue.service.UserService;
+import io.blogapp.exception.UserNotFoundException;
+import io.blogapp.exception.UserRegistrationException;
+import io.blogapp.model.User;
+import io.blogapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

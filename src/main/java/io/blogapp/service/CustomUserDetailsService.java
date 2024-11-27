@@ -1,7 +1,7 @@
-package io.mountblue.service;
+package io.blogapp.service;
 
-import io.mountblue.model.User;
-import io.mountblue.dao.UserRepository;
+import io.blogapp.model.User;
+import io.blogapp.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

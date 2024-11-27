@@ -1,6 +1,6 @@
 package org.example.blogapplication;
 
-import io.mountblue.BlogApplication;
+import io.blogapp.BlogApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

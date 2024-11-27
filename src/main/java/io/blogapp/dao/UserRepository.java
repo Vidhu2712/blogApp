@@ -1,6 +1,6 @@
-package io.mountblue.dao;
+package io.blogapp.dao;
 
-import io.mountblue.model.User;
+import io.blogapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

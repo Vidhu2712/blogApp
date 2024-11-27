@@ -1,4 +1,4 @@
-package io.mountblue.exception;
+package io.blogapp.exception;
 
 public class CommentNotFoundException extends RuntimeException {
     public CommentNotFoundException(String s) {

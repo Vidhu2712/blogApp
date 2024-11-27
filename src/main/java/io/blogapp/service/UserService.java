@@ -1,7 +1,7 @@
-package io.mountblue.service;
+package io.blogapp.service;
 
-import io.mountblue.dao.UserRepository;
-import io.mountblue.model.User;
+import io.blogapp.dao.UserRepository;
+import io.blogapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

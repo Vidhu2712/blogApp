@@ -1,4 +1,4 @@
-package io.mountblue.model;
+package io.blogapp.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

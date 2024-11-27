@@ -1,7 +1,7 @@
-package io.mountblue.service;
+package io.blogapp.service;
 
-import io.mountblue.dao.TagRepository;
-import io.mountblue.model.Tags;
+import io.blogapp.dao.TagRepository;
+import io.blogapp.model.Tags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

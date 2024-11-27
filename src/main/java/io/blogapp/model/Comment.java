@@ -1,8 +1,7 @@
-package io.mountblue.model;
+package io.blogapp.model;
 import jakarta.persistence.*;
 import lombok.Data;
 //import lombok.Generated;
-import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

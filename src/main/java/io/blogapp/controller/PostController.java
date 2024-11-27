@@ -1,13 +1,11 @@
-package io.mountblue.controller;
+package io.blogapp.controller;
 
-import io.mountblue.dao.UserRepository;
-import io.mountblue.exception.ResourceNotFoundException;
-import io.mountblue.model.Comment;
-import io.mountblue.model.Post;
-import io.mountblue.service.CommentService;
-import io.mountblue.service.PostService;
-import io.mountblue.service.TagService;
-import io.mountblue.service.UserService;
+import io.blogapp.exception.ResourceNotFoundException;
+import io.blogapp.model.Comment;
+import io.blogapp.model.Post;
+import io.blogapp.service.CommentService;
+import io.blogapp.service.PostService;
+import io.blogapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -100,17 +98,6 @@ public class PostController {
         return "posts/list";
     }
 
-
-    @GetMapping("/posts")
-    public String getAllPostsBySorting(@RequestParam(defaultValue = "asc") String sort, Model model) {
-        if ("desc".equalsIgnoreCase(sort)) {
-            model.addAttribute("posts", postService.getAllPostsSortedByPublishedDateDesc());
-        } else {
-            model.addAttribute("posts", postService.getAllPostsSortedByPublishedDateAsc());
-        }
-        return "posts/list";
-    }
-
     @GetMapping("/search")
     public String searchPosts(@RequestParam("query") String query,
                               @RequestParam(defaultValue = "0") int page,
@@ -143,30 +130,17 @@ public class PostController {
                              @RequestParam("title") String title,
                              @RequestParam("excerpt") String excerpt,
                              @RequestParam("content") String content, Model model) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            Post post = postService.getPostById(uuid);
-            if (post == null) {
-                throw new ResourceNotFoundException("Post with ID " + id + " not found.");
-            }
-            postService.updatePost(uuid, title, excerpt, content);
-            postService.updatePostTags(uuid, tagsInput);
-
-            boolean isAdmin = userService.isAdmin();
-            model.addAttribute("post", post);
-            model.addAttribute("isAdmin", isAdmin);
-            return "posts/detailsofpost";
-
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", "Invalid post ID format.");
-            return "error/400";
-        } catch (ResourceNotFoundException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error/404";
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "An unexpected error occurred. Please try again.");
-            return "error/500";
+        UUID uuid = UUID.fromString(id);
+        Post post = postService.getPostById(uuid);
+        if (post == null) {
+            throw new ResourceNotFoundException("Post with ID " + id + " not found.");
         }
+        postService.updatePost(uuid, title, excerpt, content);
+        postService.updatePostTags(uuid, tagsInput);
+        boolean isAdmin = userService.isAdmin();
+        model.addAttribute("post", post);
+        model.addAttribute("isAdmin", isAdmin);
+        return "posts/detailsofpost";
     }
 
     @GetMapping("/sort")

@@ -1,4 +1,4 @@
-package io.mountblue.exception;
+package io.blogapp.exception;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {
